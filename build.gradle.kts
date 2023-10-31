@@ -101,7 +101,9 @@ dependencies {
     include(libs.permission.api)
 
     shadow(libs.mcDiscordReserializer)
-    shadow(libs.adventure.gson)
+
+//    shadow(libs.adventure.gson)
+    shadow(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
 
     shadow(libs.kord.extensions)
     shadow(libs.emoji)

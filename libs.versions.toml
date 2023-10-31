@@ -12,7 +12,7 @@ fabric-kotlin = "1.9.4+kotlin.1.8.21"
 kord-extensions = "1.5.6"
 mc-discord-reserializer = "4.3.0"
 emoji-java = "5.1.1"
-adventure-gson = "4.11.0"
+#adventure-gson = "4.11.0"
 
 placeholder-api = "2.1.2+1.20.1"
 permission-api = "0.2-SNAPSHOT"
@@ -30,7 +30,7 @@ fabric-kotlin = { module = "net.fabricmc:fabric-language-kotlin", version.ref = 
 kord-extensions = { module = "com.kotlindiscord.kord.extensions:kord-extensions", version.ref = "kord-extensions" }
 emoji = { module = "com.vdurmont:emoji-java", version.ref = "emoji-java"}
 mcDiscordReserializer = { module = "dev.vankka:mcdiscordreserializer", version.ref = "mc-discord-reserializer"}
-adventure-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-gson"}
+#adventure-gson = { module = "net.kyori:adventure-text-serializer-gson", version.ref = "adventure-gson"}
 
 placeholder-api = { module = "eu.pb4:placeholder-api", version.ref = "placeholder-api" }
 permission-api = { module = "me.lucko:fabric-permissions-api", version.ref = "permission-api"}

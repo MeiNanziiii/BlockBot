@@ -15,7 +15,6 @@ run/
 
 # packaged files
 *.ear
-*.jar
 *.nar
 *.rar
 *.tar.gz
