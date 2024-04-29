@@ -42,8 +42,8 @@ class LinkingExtension : Extension() {
 
     override suspend fun setup() {
         ephemeralSlashCommand(::LinkingArgs) {
-            name = "link"
-            description = "links your discord account to a minecraft account"
+            name = config[LinkingSpec.CommandSpec.name]
+            description = config[LinkingSpec.CommandSpec.description]
 
             guild(config.guildId)
 
@@ -56,7 +56,7 @@ class LinkingExtension : Extension() {
             action {
                 if (!linkCodes.containsKey(arguments.code)) {
                     respond {
-                        content = "Invalid linking code"
+                        content = config[LinkingSpec.MessagesSpec.invalidCode]
                     }
                 } else {
                     val snowflake = event.interaction.user.id
@@ -85,8 +85,8 @@ class LinkingExtension : Extension() {
 
     inner class LinkingArgs : Arguments() {
         val code by string {
-            name = "code"
-            description = "The linking code received in-game"
+            name = config[LinkingSpec.CommandArgsSpec.name]
+            description = config[LinkingSpec.CommandArgsSpec.description]
         }
     }
 

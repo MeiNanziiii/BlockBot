@@ -45,6 +45,7 @@ import net.fabricmc.loader.api.FabricLoader
 import net.kyori.adventure.text.KeybindComponent
 import net.kyori.adventure.text.TranslatableComponent
 import net.minecraft.advancement.Advancement
+import net.minecraft.advancement.AdvancementFrame
 import net.minecraft.component.DataComponentTypes
 import net.minecraft.component.type.LoreComponent
 import net.minecraft.item.ItemStack
@@ -372,7 +373,7 @@ class BlockBotApiExtension : Extension(), Bot {
                 footer {
                     text = advancement.display.get().description.string
                 }
-                color = Colors.blue
+                color = if (advancement.display.get().frame == AdvancementFrame.CHALLENGE) Colors.purple else Colors.blue
             }
         }
     }

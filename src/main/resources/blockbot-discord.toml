@@ -28,6 +28,8 @@ escapeIngameMarkdown = false
     # Placeholders: {sender}, {summary}
     # Supports Simplified Text Format and Placeholder API with server context
     replyFormat = "<gray>(Replying to @{sender}: {summary})</gray>"
+    # Discord -> Minecraft mention color
+    mentionColor = "#7289da"
     # Try to add images to messages
     appendImages = false
     # Use image interpolation
@@ -50,8 +52,11 @@ escapeIngameMarkdown = false
     playerLeave = "%player:displayname% left the game"
     # Placeholders: {message}
     playerDeath = "{message}"
+
     # Placeholders: {advancement}
     playerAdvancement = "%player:displayname% has made the advancement [{advancement}]"
+    playerGoal = "%player:displayname% has reached the goal [{advancement}]"
+    playerChallenge = "%player:displayname% has completed the challenge [{advancement}]"
 
     serverStart = ":green_circle: Server Started"
     serverStop = ":octagonal_sign: Server Stopped"
@@ -65,6 +70,13 @@ escapeIngameMarkdown = false
     webhookAvatar = "https://i.imgur.com/IxPg1R2.png"
     # URL to get the webhook avatar from for players
     playerAvatarUrl = "https://cravatar.eu/helmavatar/{uuid}/128.png?{texture}"
+
+    [ChatRelay.FabricTailor]
+    # Use Fabric Tailor skin as webhook avatar
+    useFabricTailor = false
+    # Placeholders: {texture}
+    # URL to get the webhook avatar using skin texture
+    tailorAvatarUrl = "https://mc-heads.net/head/{texture}"
 
     # Placeholders: {sender}, {sender_display}, {message}
     # Supports discord markdown and Placeholder API with player context
@@ -147,11 +159,24 @@ unlinkedDisconnectMessage = [
 ]
 # Message to inform players they must be in the discord server to join
 notInServerMessage = "<red>You must be in the discord server to join"
+
+    [Linking.Command]
+    name = "link"
+    description = "links your discord account to a minecraft account"
+
+    [Linking.CommandArgs]
+    name = "code"
+    description = "The linking code received in-game"
+
     # Messages for the /link minecraft and discord commands
     [Linking.Messages]
+    # Minecraft messages
     noLinkedAccounts = "<red>There are no matching linked accounts"
     alreadyLinked = "<red>This account is already linked to <blue>{user}"
     failedUnlink = "<red>Failed to unlink these accounts!"
     successfulUnlink = "<blue>Successfully unlinked your account"
-    successfulLink = "Account successfully linked to: {player}"
     linkCode = "<blue>Link your account with <gray>/link</gray> in discord. Code: <green><bold>{code}"
+
+    # Discord messages
+    successfulLink = "Account successfully linked to: {player}"
+    invalidCode = "Invalid linking code"

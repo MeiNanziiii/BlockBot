@@ -23,13 +23,25 @@ object LinkingSpec : ConfigSpec() {
     val requireInServer by required<Boolean>()
     val notInServerMessage by required<String>()
 
+    object CommandSpec: ConfigSpec() {
+        val name by required<String>()
+        val description by required<String>()
+    }
+
+    object CommandArgsSpec: ConfigSpec() {
+        val name by required<String>()
+        val description by required<String>()
+    }
+
     object MessagesSpec : ConfigSpec() {
         val noLinkedAccounts by required<String>()
         val alreadyLinked by required<String>()
         val failedUnlink by required<String>()
         val successfulUnlink by required<String>()
-        val successfulLink by required<String>()
         val linkCode by required<String>()
+
+        val successfulLink by required<String>()
+        val invalidCode by required<String>()
     }
 }
 

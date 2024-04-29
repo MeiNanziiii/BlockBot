@@ -7,6 +7,7 @@ import dev.kord.core.supplier.EntitySupplyStrategy
 import dev.vankka.mcdiscordreserializer.renderer.implementation.DefaultMinecraftRenderer
 import io.github.quiltservertools.blockbotdiscord.config.config
 import io.github.quiltservertools.blockbotdiscord.config.getGuild
+import io.github.quiltservertools.blockbotdiscord.config.getMentionColor
 import kotlinx.coroutines.runBlocking
 import net.kyori.adventure.text.Component
 import net.kyori.adventure.text.format.TextColor
@@ -22,7 +23,7 @@ class MentionToMinecraftRenderer(
             component.append(
                 Component.text(
                     "#$name"
-                ).color(BLURPLE)
+                ).color(config.getMentionColor())
             )
         }
     }
@@ -34,7 +35,7 @@ class MentionToMinecraftRenderer(
 
             component.append(
                 Component.text("@$name")
-            ).color(BLURPLE)
+            ).color(config.getMentionColor())
         }
     }
 
@@ -42,7 +43,7 @@ class MentionToMinecraftRenderer(
         return runBlocking {
             val role = config.getGuild(bot).getRoleOrNull(Snowflake(id))
             val name = role?.name ?: "deleted-role"
-            val color = if (role != null && role.color.rgb != 0) role.color.rgb else BLURPLE.value()
+            val color = if (role != null && role.color.rgb != 0) role.color.rgb else config.getMentionColor().value()
 
             component.append(
                 Component.text(
@@ -50,9 +51,5 @@ class MentionToMinecraftRenderer(
                 ).color(TextColor.color(color))
             )
         }
-    }
-
-    companion object {
-        private val BLURPLE = TextColor.fromHexString("#7289da")!!
     }
 }
