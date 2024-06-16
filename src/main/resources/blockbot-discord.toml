@@ -2,14 +2,14 @@
 # Discord Bot token
 token = ""
 # Discord guild/server id
-guild =
+guild = 0
 
     # Channel IDs for the bot to use. Only the `chat` channel is required, others can be added or deleted
     [bot.channels]
     # Chat relay channel
-    chat =
+    chat = 0
     # Console relay channel (can be deleted)
-    console =
+    console = 0
 
 [ChatRelay]
 # Allow minecraft chat to mention/ping users and roles
