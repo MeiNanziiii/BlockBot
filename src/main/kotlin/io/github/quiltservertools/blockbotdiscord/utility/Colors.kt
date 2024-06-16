@@ -8,5 +8,6 @@ object Colors {
     val orange = Color(0xed9812)
     val yellow = Color(0xede461)
     val blue = Color(0x61a2ed)
+    val purple = Color(0xae51b8)
     val green =  Color(0x5ac477)
 }

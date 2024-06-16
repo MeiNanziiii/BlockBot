@@ -1,5 +1,6 @@
 package io.github.quiltservertools.blockbotdiscord.config
 
+import com.google.gson.JsonParser
 import com.mojang.authlib.GameProfile
 import com.uchuhimo.konf.Config
 import com.uchuhimo.konf.ConfigSpec
@@ -12,12 +13,15 @@ import io.github.quiltservertools.blockbotapi.sender.PlayerMessageSender
 import io.github.quiltservertools.blockbotdiscord.utility.getTextures
 import io.github.quiltservertools.blockbotdiscord.utility.literal
 import io.github.quiltservertools.blockbotdiscord.utility.summary
+import net.kyori.adventure.text.format.TextColor
 import net.minecraft.advancement.Advancement
+import net.minecraft.advancement.AdvancementFrame
 import net.minecraft.server.MinecraftServer
 import net.minecraft.server.network.ServerPlayerEntity
 import net.minecraft.text.MutableText
 import net.minecraft.text.Text
 import net.minecraft.util.Formatting
+import java.util.*
 
 object ChatRelaySpec : ConfigSpec() {
     val allowMentions by required<Boolean>()
@@ -27,6 +31,7 @@ object ChatRelaySpec : ConfigSpec() {
     object MinecraftFormatSpec : ConfigSpec() {
         val messageFormat by required<String>()
         val replyFormat by required<String>()
+        val mentionColor by required<String>()
         val appendImages by required<Boolean>()
         val imageInterpolation by required<Boolean>()
     }
@@ -39,6 +44,8 @@ object ChatRelaySpec : ConfigSpec() {
         val playerLeave by required<String>()
         val playerDeath by required<String>()
         val playerAdvancement by required<String>()
+        val playerGoal by required<String>()
+        val playerChallenge by required<String>()
         val serverStart by required<String>()
         val serverStop by required<String>()
     }
@@ -50,6 +57,11 @@ object ChatRelaySpec : ConfigSpec() {
         val authorFormat by required<String>()
     }
 
+    object FabricTailorSpec : ConfigSpec() {
+        val useFabricTailor by required<Boolean>()
+        val tailorAvatarUrl by required<String>()
+    }
+
     object WebhookSpec : ConfigSpec() {
         val useWebhook by required<Boolean>()
         val webhookName by required<String>()
@@ -57,6 +69,8 @@ object ChatRelaySpec : ConfigSpec() {
         val playerAvatarUrl by required<String>()
     }
 }
+
+fun Config.getMentionColor(): TextColor = TextColor.fromHexString(config[ChatRelaySpec.MinecraftFormatSpec.mentionColor])!!
 
 fun Config.formatDiscordMessage(sender: MessageSender, message: String): String =
     formatDiscordRelayMessage(sender, message, config[ChatRelaySpec.DiscordMessageFormatSpec.messageFormat])
@@ -98,7 +112,11 @@ fun Config.formatPlayerDeathMessage(player: ServerPlayerEntity, message: Text): 
 fun Config.formatPlayerAdvancementMessage(player: ServerPlayerEntity, advancement: Advancement): String =
     formatDiscordRelayMessage(
         player,
-        config[ChatRelaySpec.DiscordMessageFormatSpec.playerAdvancement],
+        when (advancement.display.get().frame!!) {
+            AdvancementFrame.TASK -> config[ChatRelaySpec.DiscordMessageFormatSpec.playerAdvancement]
+            AdvancementFrame.GOAL -> config[ChatRelaySpec.DiscordMessageFormatSpec.playerGoal]
+            AdvancementFrame.CHALLENGE -> config[ChatRelaySpec.DiscordMessageFormatSpec.playerChallenge]
+        },
         mapOf("advancement" to advancement.display.get().title)
     ).string
 
@@ -188,8 +206,23 @@ fun Config.getReplyMsg(
     ), PlaceholderContext.of(server)
 )
 
-fun Config.getWebhookChatRelayAvatar(gameProfile: GameProfile): String =
-    Placeholders.parseText(
+fun Config.getWebhookChatRelayAvatar(gameProfile: GameProfile): String {
+    val textures = gameProfile.getTextures()
+
+    if (this[ChatRelaySpec.FabricTailorSpec.useFabricTailor] && textures != null) {
+        val decode = JsonParser.parseString(String(Base64.getDecoder().decode(textures)))
+        val skinUrl = decode.asJsonObject.get("textures").asJsonObject.get("SKIN").asJsonObject.get("url").asString
+
+        return Placeholders.parseText(
+            this[ChatRelaySpec.FabricTailorSpec.tailorAvatarUrl].literal(),
+            Placeholders.ALT_PLACEHOLDER_PATTERN_CUSTOM,
+            mapOf(
+                "texture" to skinUrl.split("/").last().literal()
+            )
+        ).string
+    }
+
+    return Placeholders.parseText(
         this[ChatRelaySpec.WebhookSpec.playerAvatarUrl].literal(),
         Placeholders.ALT_PLACEHOLDER_PATTERN_CUSTOM,
         mapOf(
@@ -198,3 +231,4 @@ fun Config.getWebhookChatRelayAvatar(gameProfile: GameProfile): String =
             "texture" to (gameProfile.getTextures()?.literal() ?: Text.empty())
         )
     ).string
+}
