@@ -9,7 +9,7 @@ guild = 0
     # Chat relay channel
     chat = 0
     # Console relay channel (can be deleted)
-    console = 0
+    # console = 0
 
 [ChatRelay]
 # Allow minecraft chat to mention/ping users and roles
