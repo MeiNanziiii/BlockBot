@@ -16,6 +16,7 @@ import io.github.quiltservertools.blockbotdiscord.extensions.linking.JsonLinkedA
 import io.github.quiltservertools.blockbotdiscord.extensions.linking.LinkCommand
 import io.github.quiltservertools.blockbotdiscord.extensions.linking.LinkingExtension
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.CoroutineStart
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import net.fabricmc.api.ModInitializer
@@ -60,6 +61,14 @@ object BlockBotDiscord : ModInitializer, CoroutineScope {
         }
 
         DiscordConsoleAppender().start()
+    }
+
+    fun launch(block: suspend CoroutineScope.() -> Unit) {
+        try {
+            launch(coroutineContext, CoroutineStart.DEFAULT, block)
+        } catch (_: Exception) {
+
+        }
     }
 
     private fun serverStarting(server: MinecraftServer) {
